@@ -1,0 +1,29 @@
+---
+title: "Q4_HW6_AK"
+author: "Anshika"
+date: "3/11/2020"
+output: html_document
+---
+
+
+```{r}
+pred.nested <- predictions %>%
+  group_by(model_num) %>%
+  nest()
+pred.nested
+pred.nested$data[1]
+```
+
+```{r}
+require(hydroGOF)
+df<-pred.nested$data[1] 
+
+stat.pred <- function(df){
+  mae.st <-  mae(df$pred_mortality, df$mort)
+  rmse.st <-  rmse(df$pred_mortality, df$mort)
+  pbias.st <-  pbias(df$pred_mortality, df$mort)
+  tibble(model= model_num, st.mae = mae.st, st.rmse = rmse.st, st.pbias = pbias.st)
+}
+p<-stat.pred(df)
+```
+
